@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
 import ru.kata.spring.boot_security.demo.model.User;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
@@ -25,17 +26,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> showUsers() {
         return userDAO.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User showById(long id) {
-        return userDAO.findById((long) id).get();
+        return userDAO.findById(id).get();
     }
 
     @Override
-    @Transactional
     public void saveUser(User user) {
         User anotherUser = this.findByUsername(user.getUsername());
         if (anotherUser == null || anotherUser.getId() == user.getId()) {
@@ -46,13 +48,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
     public void delete(Long id) {
         userDAO.deleteById(id);
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userDAO.findByEmail(username);
     }
