@@ -23,12 +23,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleById(int id) {
-        return roleDao.getRoleById(id);
+        return roleDao.findById((long) id).get();
     }
 
     @Override
     public Role getRoleByRoleName(String name) {
-        return roleDao.getRoleByRoleName(name);
+        return roleDao.findByName(name);
     }
 
     @Override
@@ -39,18 +39,18 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void update( Role updatedRole) {
-        roleDao.update(updatedRole);
+        roleDao.save(updatedRole);
     }
 
 
     @Override
     public void delete(int id) {
-        roleDao.delete(id);
+        roleDao.deleteById((long) id);
     }
 
     @Override
     public List<Role> getDemandedRoles() {
-        return roleDao.getDemandedRoles();
+        return roleDao.findAll();
     }
 
 }
