@@ -11,14 +11,8 @@ public interface UserService{
 
     void saveUser(User user);
 
-    void createUser(User user);
-
-    void updateUser(long id, User user);
-
     void delete(Long id);
 
     User findByUsername(String username);
-
-    User setRolesToUser(User user, int[] rolesIdArr);
 
 }

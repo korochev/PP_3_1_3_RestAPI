@@ -1,16 +1,12 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,21 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void createUser(User user) {
-        userDAO.save(user);
-    }
-
-    @Transactional
-    @Override
-    public void updateUser(long id, User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
+        User anotherUser = this.findByUsername(user.getUsername());
+        if (anotherUser == null || anotherUser.getId() == user.getId()) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userDAO.save(user);
+        }
     }
 
 
@@ -71,17 +57,5 @@ public class UserServiceImpl implements UserService {
         return userDAO.findByEmail(username);
     }
 
-
-    @Override
-    public User setRolesToUser(User user, int[] rolesIdArr) {
-        List<Role> userRoles = new ArrayList<>();
-        if (rolesIdArr != null) {
-            for (int i : rolesIdArr) {
-                userRoles.add(roleService.getRoleById(i));
-            }
-        }
-        user.setRoles(userRoles);
-        return user;
-    }
 
 }

@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminRestController {
 
     private UserService userService;
@@ -45,9 +44,8 @@ public class AdminRestController {
     }
 
     @PatchMapping("/users/{id}")
-    ResponseEntity<User> editUser(@RequestBody User user,
-                                  @PathVariable("id") Long id){
-        userService.updateUser(id, user);
+    ResponseEntity<User> editUser(@RequestBody User user){
+        userService.saveUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -63,7 +61,7 @@ public class AdminRestController {
     }
 
     @GetMapping("/roles/{id}")
-    ResponseEntity<Role> getRoleById(@PathVariable("id") int id){
+    ResponseEntity<Role> getRoleById(@PathVariable("id") long id){
         return new ResponseEntity<>(roleService.getRoleById(id), HttpStatus.OK);
     }
 

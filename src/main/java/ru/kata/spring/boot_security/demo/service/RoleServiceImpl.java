@@ -22,8 +22,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public Role getRoleById(int id) {
-        return roleDao.findById((long) id).get();
+    public Role getRoleById(long id) {
+        return roleDao.findById(id).get();
     }
 
     @Override
@@ -44,8 +44,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public void delete(int id) {
-        roleDao.deleteById((long) id);
+    public void delete(long id) {
+        roleDao.deleteById(id);
     }
 
     @Override
