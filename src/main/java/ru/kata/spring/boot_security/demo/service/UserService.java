@@ -21,5 +21,4 @@ public interface UserService{
 
     User setRolesToUser(User user, int[] rolesIdArr);
 
-    void setEncryptedPassword(User user);
 }
