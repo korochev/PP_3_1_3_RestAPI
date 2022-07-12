@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,10 +26,9 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    private String username;
 
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -46,16 +47,6 @@ public class User implements UserDetails {
     public List<String> getStringRoles() {
         return Collections.singletonList(roles.toString());
     }
-
-   /* public String toStringRole() {
-        StringBuilder builder = new StringBuilder();
-        for (Role role : roles) {
-            builder.append(role.getRoleName()).append(" ");
-        }
-        return builder.toString().trim().substring(5);
-    }
-
-    */
 
     public User(){}
 
@@ -96,9 +87,6 @@ public class User implements UserDetails {
         return email;
     }
 
-    public void setUsername(String username) {
-        this.username = email;
-    }
 
     public List<Role> getRoles() {
         return roles;
@@ -111,7 +99,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //return roles.stream().map(r -> new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toList());
         return getRoles();
     }
 
